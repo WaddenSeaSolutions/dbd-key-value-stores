@@ -1,5 +1,5 @@
+using MongoExample.Application.Interfaces;
 using MongoExample.Application.Services;
-using MongoExample.Domain.Interfaces;
 using MongoExample.Infrastructure.Contexts;
 using MongoExample.Infrastructure.Repositories.MongoDB;
 using MongoExample.Infrastructure.Repositories.Redis;
@@ -7,18 +7,19 @@ using MongoExample.Infrastructure.Repositories.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register repositories
-builder.Services.AddScoped<IPostRepository, MongoDBPostRepository>(services =>
+builder.Services.AddScoped<IPostServiceArgs>(services =>
 {
-    var dbContext = new MongoDbContext("mongodb://localhost:27017", "mongo-example");
-    return new MongoDBPostRepository(dbContext);
-});
-builder.Services.AddScoped<IPostRepository, RedisPostRepository>(
-    services
-        =>
+    var mongoDbContext = new MongoDbContext("mongodb://localhost:27017", "mongo-example");
+    var redisDbContext = new RedisDbContext("localhost:6379");
+    var mongoDbPostRepository = new MongoDBPostRepository(mongoDbContext);
+    var redisPostRepository = new RedisPostRepository(redisDbContext, TimeSpan.FromHours(1));
+
+    return new PostServiceArgs
     {
-        var dbContext = new RedisDbContext("localhost:6379");
-        return new RedisPostRepository(dbContext, TimeSpan.FromHours(1));
-    });
+        PostPersistenceRepository = mongoDbPostRepository,
+        PostCacheRepository = redisPostRepository
+    };
+});
 
 // Register services
 builder.Services.AddScoped<PostService>();

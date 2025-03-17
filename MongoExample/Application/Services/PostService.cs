@@ -1,19 +1,26 @@
+using MongoExample.Application.Interfaces;
 using MongoExample.Core.Models;
 using MongoExample.Domain.Interfaces;
 using MongoExample.Domain.ValueObjects;
 
 namespace MongoExample.Application.Services;
 
+public class PostServiceArgs : IPostServiceArgs
+{
+    public IPostRepository PostPersistenceRepository { get; set; }
+    public IPostRepository PostCacheRepository { get; set; }
+}
+
 public class PostService
 {
-    private readonly IPostRepository _postRepository;
-    private readonly IPostRepository _redisPostRepository;
+    private readonly IPostRepository _postPersistenceRepository;
+    private readonly IPostRepository _postCacheRepository;
     
-    public PostService(IPostRepository postRepository, IPostRepository redisPostRepository)
+    public PostService(IPostServiceArgs args)
     {
-        _postRepository = postRepository;
-        _redisPostRepository = redisPostRepository;
-    }
+        _postPersistenceRepository = args.PostPersistenceRepository;
+        _postCacheRepository = args.PostCacheRepository;
+    }       
 
     public async Task<Post?> GetPostByIdAsync(string id)
     {
@@ -22,13 +29,13 @@ public class PostService
     }
     public async Task<Post?> GetPostByIdAsync(PostId id)
     {
-        Post? cachedPost = await _redisPostRepository.GetByIdAsync(id);
+        Post? cachedPost = await _postCacheRepository.GetByIdAsync(id);
         if(cachedPost is not null)
             return cachedPost;
         
-        Post? post = await _postRepository.GetByIdAsync(id);
+        Post? post = await _postPersistenceRepository.GetByIdAsync(id);
         if(post is not null)
-            await _redisPostRepository.CreateAsync(post);
+            await _postCacheRepository.CreateAsync(post);
         return post;
     }
 }
