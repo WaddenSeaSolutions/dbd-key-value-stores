@@ -1,15 +1,15 @@
-using MongoExample.Core.Repositories;
-using MongoExample.Core.Services;
+using MongoExample.Application.Services;
+using MongoExample.Infrastructure.Repositories.MongoDB;
+using MongoExample.Infrastructure.Repositories.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Register repositories
-builder.Services.AddScoped<PostRepository>();
-builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<MongoDBPostRepository>();
+builder.Services.AddScoped<RedisPostRepository>();
 
 // Register services
 builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

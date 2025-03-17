@@ -1,16 +1,13 @@
-using MongoDB.Bson;
+using MongoExample.Domain.ValueObjects;
 
 namespace MongoExample.Core.Models;
 
-public class Post
+public class Comment 
 {
-    public ObjectId Id { get; set; }
-    public string Title { get; set; }
+    public CommentId Id { get; set; }
     public string Content { get; set; }
     public string UserId { get; set; }
     public string UserName { get; set; }
-    public ObjectId BlogId { get; set; }
-    public List<Comment> Comments { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-}
+} 

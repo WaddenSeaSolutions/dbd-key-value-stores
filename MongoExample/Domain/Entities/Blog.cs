@@ -1,10 +1,10 @@
-using MongoDB.Bson;
+using MongoExample.Domain.ValueObjects;
 
 namespace MongoExample.Core.Models;
 
 public class Blog
 {
-    public ObjectId Id { get; set; }
+    public BlogId Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string UserId { get; set; }
