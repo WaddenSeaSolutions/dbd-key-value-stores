@@ -2,5 +2,12 @@
 {
     public class GetPostQuery
     {
+        public string PostId { get; }
+
+        public GetPostQuery(string postId)
+        {
+            PostId = postId;
+        }
     }
+
 }
