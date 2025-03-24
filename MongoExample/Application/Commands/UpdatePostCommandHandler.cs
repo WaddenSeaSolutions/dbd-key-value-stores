@@ -2,17 +2,7 @@ using MongoExample.Application.Services;
 
 public class UpdatePostCommand
 {
-    public Guid PostId { get; }
-    public string Title { get; }
-    public string Content { get; }
 
-    public UpdatePostCommand(Guid postId, string title, string content)
-    {
-        PostId = postId;
-        Title = title;
-        Content = content;
-    }
-}
 
 public class UpdatePostCommandHandler
 {

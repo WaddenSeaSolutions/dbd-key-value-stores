@@ -1,4 +1,5 @@
 using MongoExample.Application.Services;
+using MongoExample.Domain.Events;
 
 public class CreatePostCommandHandler
 {

@@ -1,14 +1,8 @@
 using MongoExample.Core.Models;
+using MongoExample.Infrastructure.Contexts;
 
 public class ReadPostQuery
 {
-    public Guid PostId { get; }
-
-    public ReadPostQuery(Guid postId)
-    {
-        PostId = postId;
-    }
-}
 
 public class ReadPostQueryHandler
 {
