@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoExample.Application.Interfaces;
 using MongoExample.Core.Models;
 using MongoExample.Domain.Interfaces;
@@ -37,5 +38,22 @@ public class PostService
         if(post is not null)
             await _postCacheRepository.CreateAsync(post);
         return post;
+    }
+
+    public async Task CreatePostAsync(BlogId blogId, string userId, string title, string content)
+    {
+        var newPost = new Post
+        {
+            Id = new PostId(ObjectId.GenerateNewId().ToString()),
+            BlogId = blogId,
+            UserId = userId,
+            Title = title,
+            Content = content,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        await _postPersistenceRepository.CreateAsync(newPost);
+        await _postCacheRepository.CreateAsync(newPost);
     }
 }
